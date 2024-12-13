@@ -1,0 +1,304 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7fc;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column;
+}
+
+/* Dark Mode Body */
+body.dark-mode {
+    background-color: #121212;
+    color: #fff;
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 500px;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    background: linear-gradient(145deg, #f0f0f0, #ffffff);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Dark Mode Container */
+body.dark-mode .container {
+    background-color: #333;
+    background: linear-gradient(145deg, #444, #333);
+}
+
+/* Heading */
+h3 {
+    color: #ff6f61;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode Heading */
+body.dark-mode h3 {
+    color: #ff6f61;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Input File */
+input[type="file"] {
+    padding: 12px;
+    width: 100%;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #f9f9f9;
+    font-size: 1rem;
+    color: #333;
+    display: block;
+    cursor: pointer;
+    transition: border 0.3s, background-color 0.3s;
+}
+
+input[type="file"]:hover {
+    background-color: #f1f1f1;
+    border: 1px solid #ff6f61;
+}
+
+/* Dark Mode Input */
+body.dark-mode input[type="file"] {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #444;
+}
+
+/* Buttons */
+button {
+    background-color: #ff6f61;
+    color: #fff;
+    padding: 14px 25px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    margin-top: 30px;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.2s;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #ff4f42;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 111, 97, 0.3);
+}
+
+/* Dark Mode Button */
+body.dark-mode button {
+    background-color: #444;
+}
+
+body.dark-mode button:hover {
+    background-color: #555;
+}
+
+/* Custom Alert */
+.custom-alert {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #388e3c;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-size: 1.2rem;
+    opacity: 0;
+    transition: opacity 0.4s ease, top 0.4s ease;
+    z-index: 9999;
+}
+
+.custom-alert.show {
+    opacity: 1;
+    top: 50px;
+}
+
+.custom-alert.error {
+    background-color: #d32f2f;
+}
+
+.custom-alert.success {
+    background-color: #388e3c;
+}
+
+/* Tag Button */
+.tag-button {
+    background-color: #ffdd57;
+    color: #333;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid #ddd;
+    font-weight: 600;
+}
+
+.tag-button:hover {
+    background-color: #ff6f61;
+    color: white;
+    border-color: #ff6f61;
+}
+
+/* Dark Mode Tag Button */
+body.dark-mode .tag-button {
+    background-color: #444;
+    color: #fff;
+}
+
+body.dark-mode .tag-button:hover {
+    background-color: #555;
+}
+
+/* Card-Style Audio Player */
+.audio-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin-top: 30px;
+    text-align: center;
+    position: relative;
+}
+
+.audio-card .audio-player-wrapper {
+    background-color: #ffeb3b;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.audio-card h4 {
+    font-size: 1.4rem;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+}
+
+#audio {
+    width: 100%;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    height: 50px;
+    margin-top: 10px;
+    border: none;
+}
+
+/* Dark Mode Audio Player */
+body.dark-mode .audio-card {
+    background-color: #333;
+}
+
+body.dark-mode .audio-card h4 {
+    color: #ff6f61;
+}
+
+/* Current Song Label */
+#currentSong {
+    font-size: 1.3rem;
+    color: #ff6f61;
+    margin-top: 20px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode Current Song Label */
+body.dark-mode #currentSong {
+    color: #ff6f61;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Animation for container */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.02);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    button {
+        font-size: 1rem;
+    }
+
+    h3 {
+        font-size: 1.8rem;
+    }
+
+    input[type="file"] {
+        font-size: 1rem;
+    }
+}
+
+#tagContainer {
+    display: block;
+    /* Initially show the tags */
+    padding: 10px;
+    margin-top: 10px;
+}
+
+#tagContainer.hidden {
+    display: none;
+    /* Hide the container when the hidden class is added */
+}
+
+/* Dark Mode Toggle Button - Smaller */
+#darkModeToggle {
+    background-color: #444;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 0px;
+    transition: background-color 0.3s;
+    /* display: inline-block; */
+    width: 50px;
+    height: 50px;
+    text-align: center;
+}
+
+#darkModeToggle:hover {
+    background-color: #555;
+}

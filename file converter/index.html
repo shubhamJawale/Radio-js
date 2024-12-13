@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song Database Utility</title>
+    <style>
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #00796b;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            font-size: 1.1em;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, top 0.3s ease-in-out;
+        }
+
+        .custom-alert.show {
+            opacity: 1;
+            top: 50px;
+        }
+
+        .custom-alert.error {
+            background-color: #d32f2f;
+        }
+
+        .custom-alert.success {
+            background-color: #388e3c;
+        }
+
+        body {
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h3 {
+            color: #00796b;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        input[type="file"],
+        input[type="text"] {
+            padding: 12px;
+            width: 90%;
+            max-width: 400px;
+            margin: 10px auto;
+            border: 1px solid #bdbdbd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 1em;
+            display: block;
+        }
+
+        input[type="file"]::file-selector-button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background-color: #005b4f;
+        }
+
+        button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #005b4f;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+            color: #00796b;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container div {
+            margin: 15px 0;
+        }
+
+        ::placeholder {
+            color: #9e9e9e;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h3>Song Database Utility</h3>
+        <h3>Upload a JSON File or Create a New One</h3>
+        <div>
+            <input type="file" id="jsonFileInput" accept=".json" />
+        </div>
+        <div>
+            <button id="newButton">New JSON File</button>
+        </div>
+        <div>
+            <label for="songTitle">Song Title</label>
+            <input type="text" id="songTitle" placeholder="Enter the Song Title" required />
+        </div>
+        <div>
+            <label for="song">Add Song</label>
+            <input type="file" id="song" required accept=".mp3" />
+        </div>
+        <div>
+            <label for="pre-audio">Add Preview Audio</label>
+            <input type="file" id="pre-audio" required accept=".mp3" />
+        </div>
+        <div>
+            <label for="tags">Tags</label>
+            <input type="text" id="tags" placeholder="Add tags, comma separated" required />
+        </div>
+        <div>
+            <button id="saveSongButton">Save Song</button>
+        </div>
+    </div>
+
+    <div>
+        <button id="saveFile">Save File</button>
+    </div>
+    <div id="customAlert" class="custom-alert"></div>
+
+    <script>
+        function showCustomAlert(message, type = "success") {
+            const alertBox = document.getElementById('customAlert');
+            alertBox.textContent = message;
+            alertBox.className = `custom-alert ${type}`;
+            alertBox.classList.add('show');
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 3000);
+        }
+
+        let fileData = [];
+
+        const newButton = document.getElementById('newButton');
+        const fileInput = document.getElementById('jsonFileInput');
+        const fileSaveButton = document.getElementById('saveFile');
+
+        newButton.addEventListener('click', () => {
+            showCustomAlert("Creating a new JSON file...", "success");
+            fileData = [];
+            newButton.style.display = 'none';
+            fileInput.style.display = 'none';
+        });
+
+        fileInput.addEventListener('change', (event) => {
+            const reader = new FileReader();
+            const file = event.target.files[0];
+
+            reader.onload = function (event) {
+                try {
+                    fileData = JSON.parse(event.target.result);
+                    showCustomAlert("JSON file loaded successfully!", "success");
+                } catch (e) {
+                    showCustomAlert("Error: Invalid JSON file.", "error");
+                }
+            };
+
+            reader.onerror = function () {
+                showCustomAlert("Error reading file.", "error");
+            };
+
+            reader.readAsText(file);
+            fileInput.style.display = 'none';
+            newButton.style.display = 'none';
+        });
+
+        document.getElementById("saveSongButton").addEventListener('click', async () => {
+            const songTitle = document.getElementById('songTitle').value.trim();
+            const songAudioFile = document.getElementById('song').files[0];
+            const preAudioFile = document.getElementById('pre-audio').files[0];
+            const tags = document.getElementById('tags').value.trim();
+
+            // Check for empty fields
+            if (!songTitle || !songAudioFile || !preAudioFile || !tags) {
+                showCustomAlert("Fill all the fields first!", "error");
+                return;
+            }
+
+            try {
+                // Convert files to Base64
+                const songBase64 = await fileToBase64(songAudioFile);
+                const preAudioBase64 = await fileToBase64(preAudioFile);
+
+                // Add to fileData array
+                fileData.push({
+                    title: songTitle,
+                    song: songBase64,
+                    preview: preAudioBase64,
+                    tags: tags.split(',').map(tag => tag.trim().toUpperCase())
+                });
+
+                showCustomAlert("Song saved successfully!", "success");
+                document.getElementById('songTitle').value = '';
+                document.getElementById('song').value = '';
+                document.getElementById('pre-audio').value = '';
+                document.getElementById('tags').value = '';
+            } catch (error) {
+                console.error("Error processing files:", error);
+                showCustomAlert("Failed to process audio files!", "error");
+            }
+        });
+
+        // Function to convert file to Base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+
+                reader.onload = () => {
+                    resolve(reader.result.split(',')[1]);  // Get the base64 part
+                };
+                reader.onerror = () => reject(reader.error);
+
+                reader.readAsDataURL(file);
+            });
+        }
+
+        document.getElementById("saveFile").addEventListener('click', () => {
+            if (fileData && fileData.length === 0) {
+                showCustomAlert("No data to save!", "error");
+                return;
+            } else {
+                const jsonString = JSON.stringify(fileData, null, 2);
+                const blob = new Blob([jsonString], { type: "application/json" });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "song_data.json";
+                link.click();
+                URL.revokeObjectURL(link.href);
+                showCustomAlert("File saved successfully!", "success");
+            }
+        });
+    </script>
+</body>
+
+</html>
