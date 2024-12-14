@@ -103,44 +103,44 @@ function playSongsFromTag(tag) {
 // }
 
 function playPreviewAndSong(songs) {
-    console.log(songs);
     if (songs.length > 0) {
-        let songIndex = 0;
+        let songIndex = 0; // Track the current song
 
         function playNextSong() {
             if (songIndex >= songs.length) {
-                return;
+                return; // Stop when there are no more songs
             }
 
             const song = songs[songIndex];
             currentSongLabel.textContent = `Now Playing: ${song.title}`;
 
             // Play preview first
-            let previewUrl = convertBASE64ToAudio(song.preview);
-            let songUrl = convertBASE64ToAudio(song.song);
+            const previewUrl = convertBASE64ToAudio(song.preview);
+            const songUrl = convertBASE64ToAudio(song.song);
 
-            playTheAudioPlayer(previewUrl, function () {
-                // Once preview ends, play the full song
-                playTheAudioPlayer(songUrl);
+            playTheAudioPlayer(previewUrl, () => {
+                // Once the preview ends, play the full song
+                playTheAudioPlayer(songUrl, () => {
+                    // After the full song ends, move to the next song
+                    songIndex++;
+                    playNextSong();
+                });
             });
-
-            songIndex++;
         }
 
-        playNextSong(); // Start playing the first song
+        playNextSong(); // Start with the first song
     }
 }
 
-function playTheAudioPlayer(previewUrl, callback) {
-    // Set up audio player for preview
-    audioPlayer.src = previewUrl;
-    audioPlayer.play();
+function playTheAudioPlayer(audioUrl, callback) {
+    audioPlayer.src = audioUrl; // Set the audio source
+    audioPlayer.play(); // Start playing
 
-    // When preview ends, trigger callback to play full song
     audioPlayer.onended = function () {
-        if (callback) callback(); // Callback to play the full song
+        if (callback) callback(); // Call the callback function when the audio ends
     };
 }
+
 function convertBASE64ToAudio(base64Data, callback) {
     const audioData = atob(base64Data);
     const arrayBuffer = new ArrayBuffer(audioData.length);
